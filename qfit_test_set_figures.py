@@ -25,7 +25,7 @@ def rotamer_subset_compare(subset_rotamer, comparison):
         for r in tmp['chain_resi'].unique():
             num_original = len(set(tmp[tmp['chain_resi'] == r][f'original_rotamer']))
             num_compairson = len(set(tmp[tmp['chain_resi'] == r][comparison_rotamer]))
-            if (tmp[tmp['chain_resi']==r]['original_rotamer'].all() == tmp[tmp['chain_resi']==r][comparison_rotamer].all()) == True:
+            if (tmp[tmp['chain_resi']==r]['original_rotamer'] == tmp[tmp['chain_resi']==r][comparison_rotamer]).all() == True:
                 rotamer = 'Same'
             elif bool(set(tmp[tmp['chain_resi']==r]['original_rotamer']) & set(tmp[tmp['chain_resi']==r][comparison_rotamer])) == True:
                 if len(set(tmp[tmp['chain_resi']==r]['original_rotamer'])) > len(set(tmp[tmp['chain_resi']==r][comparison_rotamer])):
@@ -142,8 +142,8 @@ def compare_rotamer(original_rotamer, comparison_rotamer, comparison, base_dir):
 
     different = len(comp_rotamer[comp_rotamer['Rotamer'] == 'Different'].index)
     same = len(comp_rotamer[comp_rotamer['Rotamer'] == 'Same'].index)
-    gain_comp = len(comp_rotamer[comp_rotamer['Rotamer'] == 'Gain in Holo'].index)
-    gain_original = len(comp_rotamer[comp_rotamer['Rotamer'] == 'Gain in Apo'].index)
+    gain_comp = len(comp_rotamer[comp_rotamer['Rotamer'] == 'Gain in Comparison'].index)
+    gain_original = len(comp_rotamer[comp_rotamer['Rotamer'] == 'Gain in Original'].index)
     print(f'% Different:{different/len(comp_rotamer.index)}')
     print(f'% Same:{same/len(comp_rotamer.index)}')
     print(f'% Gain {comparison}:{gain_comp/len(comp_rotamer.index)}')
