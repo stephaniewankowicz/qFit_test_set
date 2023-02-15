@@ -25,15 +25,15 @@ def rotamer_subset_compare(subset_rotamer, comparison):
         for r in tmp['chain_resi'].unique():
             num_original = len(set(tmp[tmp['chain_resi'] == r][f'original_rotamer']))
             num_compairson = len(set(tmp[tmp['chain_resi'] == r][comparison_rotamer]))
-            if (tmp[tmp['chain_resi']==r]['original_rotamer'] == tmp[tmp['chain_resi']==r][comparison_rotamer]).all() == True:
-                rotamer = 'Same'
-            elif bool(set(tmp[tmp['chain_resi']==r]['original_rotamer']) & set(tmp[tmp['chain_resi']==r][comparison_rotamer])) == True:
-                if len(set(tmp[tmp['chain_resi']==r]['original_rotamer'])) > len(set(tmp[tmp['chain_resi']==r][comparison_rotamer])):
+            if set(tmp[tmp['chain_resi']==r]['original_rotamer']) - set(tmp[tmp['chain_resi']==r][comparison_rotamer]):
+                rotamer = 'Different'
+            #elif bool(set(tmp[tmp['chain_resi']==r]['original_rotamer']) & set(tmp[tmp['chain_resi']==r][comparison_rotamer])) == True:
+            if len(set(tmp[tmp['chain_resi']==r]['original_rotamer'])) > len(set(tmp[tmp['chain_resi']==r][comparison_rotamer])):
                     rotamer = 'Gain in Original'
-                else:
+            elif len(set(tmp[tmp['chain_resi']==r]['original_rotamer'])) < len(set(tmp[tmp['chain_resi']==r][comparison_rotamer])):
                     rotamer = 'Gain in Comparison'
             else:
-                rotamer = 'Different'
+                rotamer = 'Same'
             rotamer_.append(tuple((i, r, rotamer, num_original, num_compairson)))
     rotamer_comp = pd.DataFrame(rotamer_, columns =['PDB', 'chain_resi', 'Rotamer', 'Num_Original', 'Num_Comp'])
     return rotamer_comp
